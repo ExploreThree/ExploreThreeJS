@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 const style = {
-  height: 250 // we can control scene size by setting container dimensions
+  height: 700 // we can control scene size by setting container dimensions
 };
 
 class App extends Component {
@@ -50,11 +50,12 @@ class App extends Component {
   addCustomSceneObjects = () => {
     const geometry = new THREE.BoxGeometry(2, 2, 2);
     const material = new THREE.MeshPhongMaterial({
-      color: 0x156289,
-      emissive: 0x072534,
-      side: THREE.DoubleSide,
-      flatShading: true
+      color: 0x00ff00,
+      // emissive: 0x072534,
+      //  side: THREE.DoubleSide,
+    //   flatShading: true
     });
+   
     this.cube = new THREE.Mesh(geometry, material);
     this.scene.add(this.cube);
 
