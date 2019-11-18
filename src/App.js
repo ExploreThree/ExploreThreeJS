@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 const style = {
-  height: 700 // we can control scene size by setting container dimensions
+  height: 800 // we can control scene size by setting container dimensions
 };
 
 class App extends Component {
@@ -39,7 +39,8 @@ class App extends Component {
     // OrbitControls allow a camera to orbit around the object
     // https://threejs.org/docs/#examples/controls/OrbitControls
     this.controls = new OrbitControls(this.camera, this.el);
-    this.renderer = new THREE.WebGLRenderer();
+    this.renderer = new THREE.WebGLRenderer({antialias:true});
+    this.renderer.setClearColor("#0000FF");
     this.renderer.setSize(width, height);
     this.el.appendChild(this.renderer.domElement); // mount using React ref
   };
@@ -51,13 +52,22 @@ class App extends Component {
     const geometry = new THREE.BoxGeometry(2, 2, 2);
     const material = new THREE.MeshPhongMaterial({
       color: 0x00ff00,
-      // emissive: 0x072534,
-      //  side: THREE.DoubleSide,
-    //   flatShading: true
+      emissive: 0x072534,
+       side: THREE.DoubleSide,
+      flatShading: true
     });
    
     this.cube = new THREE.Mesh(geometry, material);
+    this.cube.translateX(3);
+
     this.scene.add(this.cube);
+
+    const geometry2 = new THREE.SphereGeometry(2,3,3);
+    const material2 = new THREE.MeshLambertMaterial({color:0xFFCC00});
+
+    this.sphere = new THREE.Mesh(geometry2, material2);
+    this.sphere.translateX(-3);
+    this.scene.add(this.sphere);
 
     const lights = [];
     lights[0] = new THREE.PointLight(0xffffff, 1, 0);
@@ -127,117 +137,5 @@ const rootElement = document.getElementById("root");
 ReactDOM.render(<Container />, rootElement);
 
 
-
-// import React from 'react';
-// import './App.css';
-// import * as THREE from "three";
-// import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-
-// class ThreeDCube extends React.Component{
-//   constructor(prop){
-//     super(prop);
-
-//     this.state = {
-//       hide:false,
-//     }
-//   }
-
-//     componentDidMount() {
-//       this.sceneSetup();
-//       this.addCustomSceneObjects();
-//       this.startAnimationLoop();
-//     }
-
-//     sceneSetup = () => {
-//       // get container dimensions and use them for scene sizing
-//     const width = this.el.clientWidth;
-//     const height = this.el.clientHeight;
-
-//     this.scene = new THREE.Scene();
-//     this.camera = new THREE.PerspectiveCamera(
-//         75, // fov = field of view
-//         width / height, // aspect ratio
-//         0.1, // near plane
-//         1000 // far plane
-//     );
-//     this.controls = new OrbitControls( this.camera, this.el );
-    
-//     // set some distance from a cube that is located at z = 0
-//     this.camera.position.z = 5;
-
-//     this.renderer = new THREE.WebGLRenderer();
-//     this.renderer.setSize( width, height );
-//     this.el.appendChild( this.renderer.domElement ); // mount using React ref
-//     };
-
-//     addCustomSceneObjects  = () => {
-//       const geometry = new THREE.BoxGeometry(2, 2, 2);
-//     const material = new THREE.MeshPhongMaterial( {
-//       color: 0x00ff00,
-      
-//     } );
-//     // color: 0x156289,
-//     // emissive: 0x072534,
-//     //     side: THREE.DoubleSide,
-//     //     flatShading: true
-//     this.cube = new THREE.Mesh( geometry, material );
-//     this.scene.add( this.cube );
-
-//     // const lights = [];
-//     // lights[ 0 ] = new THREE.PointLight( 0xffffff, 1, 0 );
-//     // lights[ 1 ] = new THREE.PointLight( 0xffffff, 1, 0 );
-//     // lights[ 2 ] = new THREE.PointLight( 0xffffff, 1, 0 );
-
-//     // lights[ 0 ].position.set( 0, 200, 0 );
-//     // lights[ 1 ].position.set( 100, 200, 100 );
-//     // lights[ 2 ].position.set( - 100, - 200, - 100 );
-
-//     // this.scene.add( lights[ 0 ] );
-//     // this.scene.add( lights[ 1 ] );
-//     // this.scene.add( lights[ 2 ] );
-//     };
-//     startAnimationLoop = () => {
-//       // this.cube.rotation.x += 0.01;
-//     // this.cube.rotation.y += 0.01;
-
-//     this.renderer.render( this.scene, this.camera );
-//     this.requestID = window.requestAnimationFrame(this.startAnimationLoop);
-//     };
-
-//   // componentDidMount() {
-//   //   var scene = new THREE.Scene();
-//   //   var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
-//   //   var renderer = new THREE.WebGLRenderer();
-//   //   renderer.setSize( window.innerWidth, window.innerHeight );
-//   //   this.mount.appendChild( renderer.domElement );
-//   //   var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-//   //   var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-//   //   var cube = new THREE.Mesh( geometry, material );
-//   //   scene.add( cube );
-//   //   camera.position.z = 5;
-//   //   var animate = function () {
-//   //     requestAnimationFrame( animate );
-//   //     cube.rotation.x += 0.01;
-//   //     cube.rotation.y += 0.01;
-//   //     renderer.render( scene, camera );
-//   //   };
-//   //   animate();
-//   // }
-
-//   render(){
-//     return(<div ref={ref => (this.mount = ref)} />)
-//   }
-// }
-
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//       <ThreeDCube />
-//       </header>
-//     </div>
-//   );
-// }
 
 export default App;
