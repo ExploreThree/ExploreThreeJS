@@ -94,7 +94,7 @@ class App extends Component {
 
     var geometry = new THREE.Geometry();
     geometry.vertices.push(new THREE.Vector3( -10, 0, 0) );
-    geometry.vertices.push(new THREE.Vector3( 0, 10, 0) );
+    geometry.vertices.push(new THREE.Vector3( 0, 10, 5) );
     geometry.vertices.push(new THREE.Vector3( 10, 0, 0) );
     geometry.vertices.push(new THREE.Vector3( -10, 0, 0) );
 
