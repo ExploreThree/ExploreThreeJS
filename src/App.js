@@ -48,72 +48,10 @@ class App extends Component {
     this.el.appendChild(this.renderer.domElement); // mount using React ref
   };
 
-  // Here should come custom code.
-  // Code below is taken from Three.js BoxGeometry example
-  // https://threejs.org/docs/#api/en/geometries/BoxGeometry
   addCustomSceneObjects = () => {
-
-    // let cylinderDetail = 1000;
-
-    // const geometry = new THREE.CylinderGeometry(1, 1, 10, cylinderDetail);
-    // // const geometry = new THREE.BoxGeometry(2, 2, 2);
-    // const material = new THREE.MeshPhongMaterial({
-    //   color: 0x00ff00,
-    //   emissive: 0x072534,
-    //    side: THREE.DoubleSide,
-    //   flatShading: true
-    // });
-    // this.arrow = new THREE.Mesh(geometry,material);
-    // this.scene.add(this.arrow);
 
     this.arrow = new Arrow().mesh();
     this.scene.add(this.arrow);
-   
-    // this.cube = new THREE.Mesh(geometry, material);
-    // this.cube.translateX(3);
-
-    // this.scene.add(this.cube);
-
-    // var heartShape = new THREE.Shape();
-
-    // heartShape.moveTo( 25, 25);
-    
-    // heartShape.bezierCurveTo( 25, 25, 20, 0, 0, 0 );
-    // heartShape.bezierCurveTo( -30, 0, -30, 35,-30,35 );
-    // heartShape.bezierCurveTo( -30, 55, -10, 77, 25, 95 );
-    // heartShape.bezierCurveTo( 60, 77, 80, 55, 80, 35 );
-    // heartShape.bezierCurveTo( 80, 35, 80, 0, 50, 0 );
-    // heartShape.bezierCurveTo( 35, 0, 0, 25, 25, 25 );
-
-    // var extrudeSettings = { amount: 8, bevelEnabled: true, bevelSegments: 2, steps: 8, bevelSize: 1, bevelThickness: 1 };
-
-    // let heartGeometry = new THREE.ExtrudeGeometry( heartShape, extrudeSettings );
-
-    // this.heart = new THREE.Mesh(heartGeometry,new THREE.MeshPhongMaterial({color: 0xff0000}));
-    // this.scene.add(this.heart);
-
-
-    // var material = new THREE.LineBasicMaterial( { color: 0x000000 } );
-    // var material = new THREE.LineDashedMaterial( {
-    //   color: 0x000000,
-    //   linewidth: 1,
-    //   scale: 1,
-    //   dashSize: 1.5,
-    //   gapSize: 2,
-    // } );
-
-    // var geometry = new THREE.Geometry();
-    // geometry.vertices.push(new THREE.Vector3( -10, 0, 0) );
-    // geometry.vertices.push(new THREE.Vector3( 0, 10, 5) );
-    // geometry.vertices.push(new THREE.Vector3( 10, 0, 0) );
-    // geometry.vertices.push(new THREE.Vector3( -10, 0, 0) );
-
-    // this.line = new THREE.Line( geometry, material );
-    // this.line.computeLineDistances();
-    // // this.line.width = 50;
- 
-
-    // this.scene.add(label);
 
     const lights = [];
     lights[0] = new THREE.PointLight(0xffffff, 1, 0);

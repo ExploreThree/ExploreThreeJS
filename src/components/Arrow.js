@@ -14,7 +14,7 @@ export default class Arrow {
     let cylinderDetail = 1000;
 
     const geometry = new THREE.CylinderGeometry(1, 1, 10, cylinderDetail);
-    // const geometry = new THREE.BoxGeometry(2, 2, 2);
+
     const material = new THREE.MeshPhongMaterial({
       color: 0x00ff00,
       emissive: 0x072534,
