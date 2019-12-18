@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import Arrow from "./components/Arrow";
 
 const style = {
   height: 800 // we can control scene size by setting container dimensions
@@ -51,13 +52,22 @@ class App extends Component {
   // Code below is taken from Three.js BoxGeometry example
   // https://threejs.org/docs/#api/en/geometries/BoxGeometry
   addCustomSceneObjects = () => {
-    // const geometry = new THREE.BoxGeometry(2, 2, 2);
+
+    // let cylinderDetail = 1000;
+
+    // const geometry = new THREE.CylinderGeometry(1, 1, 10, cylinderDetail);
+    // // const geometry = new THREE.BoxGeometry(2, 2, 2);
     // const material = new THREE.MeshPhongMaterial({
     //   color: 0x00ff00,
     //   emissive: 0x072534,
     //    side: THREE.DoubleSide,
     //   flatShading: true
     // });
+    // this.arrow = new THREE.Mesh(geometry,material);
+    // this.scene.add(this.arrow);
+
+    this.arrow = new Arrow().mesh();
+    this.scene.add(this.arrow);
    
     // this.cube = new THREE.Mesh(geometry, material);
     // this.cube.translateX(3);
@@ -84,37 +94,39 @@ class App extends Component {
 
 
     // var material = new THREE.LineBasicMaterial( { color: 0x000000 } );
-    var material = new THREE.LineDashedMaterial( {
-      color: 0x000000,
-      linewidth: 1,
-      scale: 1,
-      dashSize: 1.5,
-      gapSize: 2,
-    } );
+    // var material = new THREE.LineDashedMaterial( {
+    //   color: 0x000000,
+    //   linewidth: 1,
+    //   scale: 1,
+    //   dashSize: 1.5,
+    //   gapSize: 2,
+    // } );
 
-    var geometry = new THREE.Geometry();
-    geometry.vertices.push(new THREE.Vector3( -10, 0, 0) );
-    geometry.vertices.push(new THREE.Vector3( 0, 10, 5) );
-    geometry.vertices.push(new THREE.Vector3( 10, 0, 0) );
-    geometry.vertices.push(new THREE.Vector3( -10, 0, 0) );
+    // var geometry = new THREE.Geometry();
+    // geometry.vertices.push(new THREE.Vector3( -10, 0, 0) );
+    // geometry.vertices.push(new THREE.Vector3( 0, 10, 5) );
+    // geometry.vertices.push(new THREE.Vector3( 10, 0, 0) );
+    // geometry.vertices.push(new THREE.Vector3( -10, 0, 0) );
 
-    this.line = new THREE.Line( geometry, material );
-    this.line.computeLineDistances();
-    // this.line.width = 50;
-    this.scene.add(this.line);
+    // this.line = new THREE.Line( geometry, material );
+    // this.line.computeLineDistances();
+    // // this.line.width = 50;
+ 
 
-    // const lights = [];
-    // lights[0] = new THREE.PointLight(0xffffff, 1, 0);
-    // lights[1] = new THREE.PointLight(0xffffff, 1, 0);
-    // lights[2] = new THREE.PointLight(0xffffff, 1, 0);
+    // this.scene.add(label);
 
-    // lights[0].position.set(0, 200, 0);
-    // lights[1].position.set(100, 200, 100);
-    // lights[2].position.set(-100, -200, -100);
+    const lights = [];
+    lights[0] = new THREE.PointLight(0xffffff, 1, 0);
+    lights[1] = new THREE.PointLight(0xffffff, 1, 0);
+    lights[2] = new THREE.PointLight(0xffffff, 1, 0);
 
-    // this.scene.add(lights[0]);
-    // this.scene.add(lights[1]);
-    // this.scene.add(lights[2]);
+    lights[0].position.set(0, 200, 0);
+    lights[1].position.set(100, 200, 100);
+    lights[2].position.set(-100, -200, -100);
+
+    this.scene.add(lights[0]);
+    this.scene.add(lights[1]);
+    this.scene.add(lights[2]);
   };
 
   startAnimationLoop = () => {
