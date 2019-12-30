@@ -7,6 +7,9 @@ https://codeburst.io/react-16-three-js-integration-tips-2019-b6afe19c0b83
 
 https://reactjs.org/tutorial/tutorial.html
 
+Jack's Library
+https://github.com/jackstanek/three_math_library
+
 Important Advice for Implementing React
 
 1) Always call super() when constructing subclasses in JS. 
