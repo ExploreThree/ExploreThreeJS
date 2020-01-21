@@ -176,7 +176,7 @@ class Arrow extends Component {
 
       headProps : {
         addHead: true,
-        headLength: 0.2,
+        headLength: 0.1,
         headWidth: 0.04,
         headLengthMaxRatio: 0.6,
         headWidthMaxRatio: 2,
