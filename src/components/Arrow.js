@@ -1,16 +1,14 @@
 import * as THREE from "three";
+import {Component} from "react";
 
 
-export default class Arrow {
-    constructor({tail_vector = new THREE.Vector3( 0, 0, 0 ),head_vector = new THREE.Vector3( 0, 1, 0 )}= {}){
-    this.head_vector = head_vector;
-    this.tail_vector = tail_vector;
-    
-  }
 
-  //Not sure how much of this processing should be in the constructor, this works for now
-  //Not using head or tail info yet
-  mesh(){
+export default class Arrow extends Component {
+  constructor (props) {
+    super(props);
+    this.head_vector = new THREE.Vector3( 0, 1, 0 );
+    this.tail_vector= new THREE.Vector3( 0, 0, 0 );
+
     let cylinderDetail = 1000;
 
     const geometry = new THREE.CylinderGeometry(1, 1, 10, cylinderDetail);
@@ -22,7 +20,11 @@ export default class Arrow {
       flatShading: true
     });
 
-    return new THREE.Mesh(geometry,material);
+    props.scene.add(new THREE.Mesh(geometry,material));
+  }
+
+  render(){
+    return null;
   }
 }
 

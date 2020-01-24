@@ -5,7 +5,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Arrow from "./components/Arrow";
 
 const style = {
-  height: 800 // we can control scene size by setting container dimensions
+  height: 600 // we can control scene size by setting container dimensions
 };
 
 class App extends Component {
@@ -50,8 +50,8 @@ class App extends Component {
 
   addCustomSceneObjects = () => {
 
-    this.arrow = new Arrow().mesh();
-    this.scene.add(this.arrow);
+    // this.arrow = new Arrow().mesh();
+    // this.scene.add(this.arrow);
 
     const lights = [];
     lights[0] = new THREE.PointLight(0xffffff, 1, 0);
@@ -92,7 +92,9 @@ class App extends Component {
   };
 
   render() {
-    return <div style={style} ref={ref => (this.el = ref)} />;
+    return <div style={style} ref={ref => (this.el = ref)} >
+      <Arrow scene={this.scene} />
+      </div>;
   }
 }
 
@@ -102,7 +104,7 @@ class Container extends React.Component {
   render() {
     const { isMounted = true } = this.state;
     return (
-      <>
+      <React.Fragment>
         <button
           onClick={() =>
             this.setState(state => ({ isMounted: !state.isMounted }))
@@ -112,7 +114,7 @@ class Container extends React.Component {
         </button>
         {isMounted && <App />}
         {isMounted && <div>Scroll to zoom, drag to rotate</div>}
-      </>
+      </React.Fragment>
     );
   }
 }

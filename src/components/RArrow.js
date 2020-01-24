@@ -241,6 +241,22 @@ class Arrow extends Component {
 
   }
 
+  mesh(){
+    // let cylinderDetail = 1000;
+
+    // const geometry = new THREE.CylinderGeometry(1, 1, 10, cylinderDetail);
+
+    // const material = new THREE.MeshPhongMaterial({
+    //   color: 0x00ff00,
+    //   emissive: 0x072534,
+    //    side: THREE.DoubleSide,
+    //   flatShading: true
+    // });
+
+    // return new THREE.Mesh(geometry,material);
+    return this.arrow;
+  }
+
   setEndpoint(endpoint, headLength, headWidth, tailLength, tailWidth) {
     var dir = new THREE.Vector3();
     var length;
@@ -470,37 +486,41 @@ class Arrow extends Component {
   }
 }
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight,0.1,1000);
-    this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    // this.mount = new Node();
-    document.body.appendChild( this.renderer.domElement );
-  }
-  componentDidMount() {
-    // this.mount.appendChild(this.renderer.domElement);
+export default Arrow;
 
-    this.camera.position.z = 5;
-    var animate = () => {
-      requestAnimationFrame( animate );
-      this.renderer.render( this.scene, this.camera );
-    };
-    animate();
-  }
-  adder(child) {
-    this.scene.add(child);
-  }
-  render() {
-    return(
-      <Arrow adder={child => this.adder(child)} parameters={{color: 0x00ff00}}/>
-    )
-  }
-}
+// class App extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.scene = new THREE.Scene();
+//     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight,0.1,1000);
+//     this.renderer = new THREE.WebGLRenderer();
+//     this.renderer.setSize(window.innerWidth, window.innerHeight);
+//     // this.mount = new Node();
+//     document.body.appendChild( this.renderer.domElement );
+//   }
+//   componentDidMount() {
+//     // this.mount.appendChild(this.renderer.domElement);
 
-const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+//     this.camera.position.z = 5;
+//     var animate = () => {
+//       requestAnimationFrame( animate );
+//       this.renderer.render( this.scene, this.camera );
+//     };
+//     animate();
+//   }
+//   adder(child) {
+//     this.scene.add(child);
+//   }
+//   render() {
+//     return(
+//       <Arrow adder={child => this.adder(child)} parameters={{color: 0x00ff00}}/>
+//     )
+//   }
+// }
 
-export default App;
+
+
+// const rootElement = document.getElementById("root");
+// ReactDOM.render(<App />, rootElement);
+
+// export default App;
