@@ -21,144 +21,6 @@ import * as THREE from "three";
  *  opacity - Number
  */
 
- class Head extends Component {
-   constructor(props) {
-     super(props);
-     if(props.state.headProps.addHead) {
-     	var coneGeometry = new THREE.CylinderGeometry( 0, 0.5, 1, props.state.arrowDetail, 1 );
-
-     	var coneMaterial;
-     	if(props.state.lambertMaterial) {
-     	    coneMaterial = new THREE.MeshLambertMaterial({ color: props.state.color, ambient: props.state.color, transparent: props.state.transparent, opacity: props.state.opacity});
-     	}
-     	else {
-     	    coneMaterial = new THREE.MeshBasicMaterial({color: props.state.color});
-     	}
-     	this.cone = new THREE.Mesh( coneGeometry, coneMaterial);
-     	this.cone.matrixAutoUpdate = false;
-     }
-   }
-
-   setScale(l, x, y, z) {
-     this.cone.scale.set(x, y, z);
-     this.cone.position.set(0, l-y/2, 0);
-     this.cone.updateMatrix();
-   }
-
-   setColor(color) {
-     this.cone.material.color.set(color);
-   }
-
-   componentDidMount() {
-     if(this.props.state.headProps.addHead) this.props.adder(this.cone);
-   }
-   render() {return(null)}
-
- }
-
- class Line extends Component {
-   constructor(props) {
-     super(props);
-     if(props.state.lineProps.cylinderForLine) {
-     	var cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, props.state.cylinderDetail);
-     	cylinderGeometry.applyMatrix( new THREE.Matrix4().makeTranslation( 0, 0.5, 0 ) );//Translates cylinder 0.5 in the y direction
-     	var lineMaterial;
-     	if(props.state.lambertMaterial) {
-     	    lineMaterial = new THREE.MeshLambertMaterial({ color: props.state.color, ambient: props.state.color, transparent: props.state.transparent, opacity: props.state.opacity});
-     	}
-     	else {
-     	    lineMaterial = new THREE.MeshBasicMaterial({color: props.state.color});
-     	}
-
-     	this.line = new THREE.Mesh( cylinderGeometry, lineMaterial);
-     	this.line.scale.set(props.state.lineWidth, 1, props.state.lineWidth);
-         }
-         else {
-     	var lineGeometry = new THREE.Geometry();
-     	lineGeometry.vertices.push( new THREE.Vector3( 0, 0, 0 ) );
-     	lineGeometry.vertices.push( new THREE.Vector3( 0, 1, 0 ) );//This default direction doesn't matter. Direction will be changed manually later
-     	this.line = new THREE.Line( lineGeometry, new THREE.LineBasicMaterial( { color: props.state.color, linewidth: props.state.lineWidth } ) );
-
-      this.line.matrixAutoUpdate = false;//Done in order to manually control when the matrix updates
-    }
-
-   }
-
-   setYScale(scale) {
-     this.line.scale.y = scale;
-     this.line.updateMatrix();
-   }
-
-   setColor(color) {
-     this.line.material.color.set(color);
-   }
-
-   returnYScale() {
-     return this.line.scale.y;
-   }
-
-   componentDidMount() {
-     this.props.adder(this.line);
-   }
-   render() {return(null)}
-
- }
-
- class Tail extends Component {
-   constructor(props) {
-     super(props);
-     if(props.state.tailProps.addTail) {
-     	var tailGeometry = new THREE.CylinderGeometry( 0.5, 0.5, 1, props.state.arrowDetail, 1 );
-     	tailGeometry.applyMatrix( new THREE.Matrix4().makeTranslation( 0, 0.499, 0 ) );
-     	var tailMaterial;
-     	if(props.state.lambertMaterial) {
-     	    tailMaterial = new THREE.MeshLambertMaterial({ color: props.state.color, ambient: props.state.color, transparent: props.state.transparent, opacity: props.state.opacity});
-     	}
-     	else {
-     	    tailMaterial = new THREE.MeshBasicMaterial({color: props.state.color});
-     	}
-     	this.tail = new THREE.Mesh( tailGeometry, tailMaterial );
-     	this.tail.matrixAutoUpdate = false;
-     }
-   }
-
-   setScale(x, y, z) {
-     this.tail.scale.set(x, y, z);
-     this.tail.position.set(0,0,0);
-     this.tail.updateMatrix();
-   }
-
-   setColor(color) {
-     this.tail.material.color.set(color);
-   }
-
-   componentDidMount() {
-     if(this.props.state.tailProps.addTail) this.props.adder(this.tail);
-   }
-   render() {return null}
- }
-
- // class DragTipSphere extends Component {
- //   constructor(props) {
- //     super(props);
- //
- //     var sphereGeometry = new THREE.SphereGeometry(0.5);
- //     this.sphere = new THREE.Mesh(sphereGeometry, new THREE.MeshBasicMaterial());
- //
- //     var scale = props.state.headProps.headLength*2;
- //     this.sphere.scale.set(scale, scale, scale);
- //
- //     this.sphere.draggable = true;
- //     this.sphere.visible = false;
- //
- //     this.sphere.position.set(0, props.state.center, 0);
- //     props.state.arrow.localToWorld(this.sphere.position);
- //     if(props.state.headProps.addHead) {
- //       this.sphere.represents =
- //     }
- //   }
- // }
-
 class Arrow extends Component {
   constructor (props) {
     super(props);
@@ -362,7 +224,7 @@ class Arrow extends Component {
     }
     this.state.headProps.headLengthActual = headLength;
 
-    this.refs.line.setYScale(length - headLength);
+    this.state.line.setYScale(length - headLength);
 
     if(this.state.headProps.addHead) {
       var manualHeadWidth = false;
@@ -376,7 +238,7 @@ class Arrow extends Component {
       if(!manualHeadWidth) {
         headWidth = Math.min(headLength*this.state.headProps.headWidthMaxRatio, headWidth);
       }
-      this.refs.head.setScale(length, headWidth, headLength, headWidth);
+      this.state.cone.setScale(length, headWidth, headLength, headWidth);
     }
 
     if(this.state.tailProps.addTail) {
@@ -398,31 +260,31 @@ class Arrow extends Component {
         manualTailWidth = true;
       }
       if(!manualTailWidth) {
-        tailWidth = Math.min(tailLength*this.tailWidthMaxRatio, tailWidth);
+        tailWidth = Math.min(tailLength*this.state.tailProps.tailWidthMaxRatio, tailWidth);
       }
-      this.refs.tail.setScale(tailWidth, tailLength, tailWidth);
+      this.state.tail.setScale(tailWidth, tailLength, tailWidth);
     }
 
   }
 
   setColor(color) {
-    this.refs.line.setColor(color);
+    this.state.line.setColor(color);
     if(this.state.headProps.addHead) {
-      this.refs.head.setColor(color);
+      this.state.cone.setColor(color);
     }
     if(this.state.tailProps.addTail) {
-      this.refs.tail.setColor(color);
+      this.state.tail.setColor(color);
     }
   }
 
   returnLength() {
-    return this.refs.line.returnYScale() + this.state.headProps.headLengthActual;
+    return this.state.line.returnYScale() + this.state.headProps.headLengthActual;
   }
 
   returnTipPosition() {
-    var tipPosition = new THREE.Vector3(0, this.returnLength(), 0);
+    var tipPosition = new THREE.Vector3(0, this.arrow.returnLength(), 0);
     this.arrow.updateMatrixWorld();
-    this.localToWorld(tipPosition);
+    this.arrow.localToWorld(tipPosition);
     return tipPosition;
   }
 
@@ -446,29 +308,68 @@ class Arrow extends Component {
     this.setDirection(dir);
     this.setLength(length);
 
-    if(this.dragTipSphere) {
-      this.dragTipSphere.adjustposition();
+    if(this.state.dragTipSphere) {//Might cause type issues
+      this.state.dragTipSphere.adjustposition();
     }
   }
 
-  // componentDidMount() {
-  //   var dir, length;
-  //   if(this.parameters.hasOwnProperty("endpoint")) {
-  //     dir = this.parameters["endpoint"].clone().sub(this.state.lineProps.position);
-  //     length = dir.length();
-  //     dir.normalize();
-  //   } else {
-  //     dir = this.parameters.hasOwnProperty("dir") ?
-  //         this.parameters["dir"] : new THREE.Vector3(1,0,0);
-  //     length = this.parameters.hasOwnProperty("length") ?
-  //         this.parameters["length"] : 1;
-  //   }
-  // 
-  //   this.setDirection(dir);
-  //   this.setLength(length, this.state.headProps.headLength, this.state.headProps.headWidth, this.state.tailProps.tailLength, this.state.tailProps.tailWidth);
-  //
-  //   this.props.adder(this.arrow);
-  // }
+  returnDragTipSphere() {
+    if(this.state.dragTipSphere) {
+      return this.dragTipSphere;
+    }
+
+    var sphereGeometry = new THREE.SphereGeometry(0.5);
+    this.state.dragTipSphere = new THREE.Mesh(sphereGeometry, new THREE.MeshBasicMaterial());
+
+    this.state.dragTipSphere.scale.set(this.state.headProps.headLength*2, this.state.headProps.headLength*2, this.state.headProps.headLength*2);
+
+    this.state.dragTipSphere.draggable = true;
+    this.state.dragTipSphere.visible = false;
+
+    this.arrow.updateMatrixWorld();
+    this.state.dragTipSphere.position.set(0, this.state.line.scale.y + this.state.headProps.headLength/2.0,0);
+    this.arrow.localtoWorld(this.state.dragTipSphere.position);
+    if(this.state.headProps.addHead) {
+      this.state.dragTipSphere.represents = this.state.cone;
+    }
+
+    var dir = new THREE.Vector3();
+    var pos = new THREE.Vector3();
+
+    this.state.dragTipSphere.addEventListener('moved', (event) => this.state.dragTipSphere.adjustArrow(event.initialize));
+
+    this.state.dragTipSphere.adjustArrow = (initialize) => {
+      if(initialize) {
+        if(this.state.dragTipSphere.parent) {
+          this.state.dragTipSphere.parent.updateMatrixWorld();
+        }
+        if(this.arrow.parent) {
+          this.arrow.parent.updateMatrixWorld();
+        }
+        else {
+          this.arrow.updateMatrixWorld();
+        }
+      }
+
+      dir.copy(this.state.dragTipSphere.position);
+      if(this.state.dragTipSphere.parent) {
+        this.state.dragTipSphere.parent.localToWorld(dir);
+      }
+      if(this.arrow.parent) {
+        this.arrow.parent.worldToLocal(dir);
+      }
+      dir.sub(this.arrow.position);
+      var length = dir.length();
+      dir.normalize();
+      length += this.state.headProps.headLengthActual/2.0;
+
+      this.setDirection(dir);
+      this.setLength(length);
+    }
+
+    this.state.dragTipSphere.adjustPosition = () => {}
+  }
+
   render() {
     return(null);
   }
