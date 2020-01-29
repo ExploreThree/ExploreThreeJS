@@ -35,6 +35,7 @@ class Arrow extends Component {
 
     this.state = {
       dragTipSphere: false,
+      dragTailSphere: false,
 
       cone: new THREE.Object3D(),
       headProps : {
@@ -142,7 +143,7 @@ class Arrow extends Component {
     }
 
     this.state.line.matrixAutoUpdate = false;
-    this.props.scene.add(this.state.line);
+    this.arrow.add(this.state.line);
 
     if(this.state.headProps.addHead) {
       var coneGeometry = new THREE.CylinderGeometry(0, 0.5, 1, arrowDetail, 1);
@@ -154,7 +155,7 @@ class Arrow extends Component {
       }
       this.state.cone = new THREE.MeshBasicMaterial({color: color});
       this.state.cone.matrixAutoUpdate = false;
-      this.props.scene.add(this.state.cone);
+      this.arrow.add(this.state.cone);
     }
 
     if(this.state.tailProps.addTail) {
@@ -168,12 +169,14 @@ class Arrow extends Component {
       }
       this.state.tail = new THREE.Mesh(tailGeometry, tailMaterial);
       this.statea.tail.matrixAutoUpdate = false;
-      this.props.scene.add(this.state.tail);
+      this.arrow.add(this.state.tail);
     }
 
     //May need to manually bind these methods
     this.setDirection( dir);
     this.setLength(length);
+
+    this.props.scene.add(this.arrow);
   }
 
   mesh(){
@@ -367,7 +370,102 @@ class Arrow extends Component {
       this.setLength(length);
     }
 
-    this.state.dragTipSphere.adjustPosition = () => {}
+    this.state.dragTipSphere.adjustPosition = () => {
+      if(this.state.dragTipSphere.parent) {
+        this.state.dragTipSphere.parent.updateMatrixWorld();
+      }
+      this.arrow.updateMatrixWorld();
+
+      pos.set(0, this.state.line.scale.y + this.state.headProps.headLengthActual/2.0, 0);
+      this.arrow.localToWorld(pos);
+      if(this.state.dragTipSphere.parent) {
+        this.state.dragTipSphere.parent.worldToLocal(pos);
+      }
+      this.state.dragTipSphere.position.copy(pos);
+
+    }
+    //Maybe should be On Clicks instead?
+    this.arrow.addEventListener('added', (event) => {this.state.dragTipSphere.adjustPosition()});
+    this.state.dragTipSphere.addEventListener('added', (event) => {this.state.dragTipSphere.adjustPosition()});
+
+    return this.state.dragTipSphere;
+  }
+
+  returnDragTailSphere() {
+    if(this.state.dragTailSphere) {
+      return this.state.dragTailSphere;
+    }
+
+    var sphereGeometry = new THREE.SphereGeometry(0.5);
+    this.state.dragTailSphere = new THREE.Mesh(sphereGeometry, new THREE.MeshBasicMaterial());
+    this.state.dragTailSphere.scale.set(this.state.tailProps.tailWidth*2, this.state.tailProps.tailWidth*2, this.state.tailProps.tailWidth*2);
+
+    this.state.dragTailSphere.draggable=true;
+    this.state.dragTailSphere.visible=false;
+    this.arrow.updateMatrixWorld();
+    this.state.dragTailSphere.position.set(0,0,0);
+    this.arrow.localToWorld(this.state.dragTailSphere.position);
+    if(this.state.tail) {
+      this.state.dragTailSphere.represents = this.state.tail;
+    }
+
+    var dir = new THREE.Vector3();
+    var pos = new THREE.Vector3();
+
+    this.state.dragTailSphere.addEventListener('moved', (event) => {this.state.dragTailSphere.adjustArrow(event.initialize)});
+
+    this.state.dragTailSphere.adjustArrow = (intialize) => {
+      this.arrow.updateMatrixWorld();
+
+      if(initialize) {
+        if(this.state.dragTailSphere.parent) {
+          this.state.dragTailSphere.parent.updateMatrixWorld();
+        }
+        if(this.arrow.parent) {
+          this.arrow.parent.updateMatrixWorld();
+        }
+      }
+
+      dir.copy(this.state.cone.position);
+      this.arrow.localToWorld(dir);
+      pos.copy(this.state.dragTailSphere.position);
+      if(this.state.dragTailSphere.parent) {
+        this.state.dragTailSphere.parent.localToWorld(pos);
+      }
+      if(this.arrow.parent) {
+        this.arrow.parent.worldToLocal(dir);
+        this.arrow.parent.worldToLocal(pos);
+      }
+      dir.sub(pos);
+
+      var length = dir.length();
+      dir.normalize();
+      length += this.state.headProps.headLengthActual/2.0;
+
+      this.arrow.position.copy(pos);
+
+      this.setDirection(dir);
+      this.arrow.setLength(length);
+    }
+
+    this.dragTailSphere.adjustPosition = () => {
+      if(this.state.dragTailSphere.parent) {
+        this.state.dragTailSphere.parent.updateMatrixWorld();
+      }
+      this.arrow.updateMatrixWorld();
+
+      pos.set(0,0,0);
+      this.arrow.localToWorld(pos);
+      if(this.state.dragTailSphere.parent) {
+        this.state.dragTailSphere.parent.worldToLocal(pos);
+      }
+      this.state.dragTailSphere.position.copy(pos);
+    }
+
+    this.arrow.addEventListener('added', (event) => {this.state.dragTailSphere.adjustPosition()});
+    this.state.dragTailSphere.addEventListener('added', (event) => {this.state.dragTailSphere.adjustPosition()});
+
+    return this.state.dragTailSphere;
   }
 
   render() {
