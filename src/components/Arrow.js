@@ -19,6 +19,8 @@ export default class Arrow extends Component {
        side: THREE.DoubleSide,
       flatShading: true
     });
+    console.log(props);
+    
 
     props.scene.add(new THREE.Mesh(geometry,material));
   }

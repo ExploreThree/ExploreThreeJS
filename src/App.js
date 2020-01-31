@@ -9,8 +9,16 @@ const style = {
 };
 
 class App extends Component {
-  componentDidMount() {
+  constructor(props){
+    super(props);
+
+    this.sceneSetup = this.sceneSetup.bind(this);
+
     this.sceneSetup();
+    
+  }
+  componentDidMount() {
+    this.controlAndRenderSetup();
     this.addCustomSceneObjects();
     this.startAnimationLoop();
     window.addEventListener("resize", this.handleWindowResize);
@@ -26,10 +34,15 @@ class App extends Component {
   // https://threejs.org/docs/#manual/en/introduction/Creating-a-scene
   sceneSetup = () => {
     // get container dimensions and use them for scene sizing
-    const width = this.el.clientWidth;
-    const height = this.el.clientHeight;
 
     this.scene = new THREE.Scene();
+    
+  }
+
+    controlAndRenderSetup = () => {
+
+    const width = this.el.clientWidth;
+    const height = this.el.clientHeight;
     this.camera = new THREE.PerspectiveCamera(
       75, // fov = field of view
       width / height, // aspect ratio
