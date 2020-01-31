@@ -25,13 +25,13 @@ class Arrow extends Component {
   constructor (props) {
     super(props);
 
-    this.arrow = new THREE.Object3D();//Initializes skeleton for Arrow as a custom three object
+    // this.arrow = new THREE.Object3D();//Initializes skeleton for Arrow as a custom three object
 
-    if (props["parameters"]) {
-      this.parameters = props["parameters"];
-    } else {
-      this.parameters = {};
-    }
+    // if (props["parameters"]) {
+    //   this.parameters = props["parameters"];
+    // } else {
+    //   this.parameters = {};
+    // }
 
     this.state = {
       dragTipSphere: false,
@@ -124,8 +124,8 @@ class Arrow extends Component {
     this.parameters["opacity"] :  1;
 
     if(this.state.lineProps.cylinderForLine) {
-      var cylinderGeometry = new THREE.CylinderGeometry(1,1,1, cylinderDetail);
-      cylinderGeometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, 0.5, 0));
+      // var cylinderGeometry = new THREE.CylinderGeometry(1,1,1, cylinderDetail);
+      // cylinderGeometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, 0.5, 0));
       var lineMaterial;
       if(lambertMaterial) {
         lineMaterial = new THREE.MeshLambertMaterial({color: color, ambient: color, transparent: transparent, opacity: opacity});
@@ -133,8 +133,8 @@ class Arrow extends Component {
         lineMaterial = new THREE.MeshBasicMaterial({color: color});
       }
 
-      this.state.line = new THREE.Mesh(cylinderGeometry, lineMaterial);
-      this.state.line.scale.set(lineWidth, 1, lineWidth);
+      // this.state.line = new THREE.Mesh(cylinderGeometry, lineMaterial);
+      // this.state.line.scale.set(lineWidth, 1, lineWidth);
     } else {
       var lineGeometry = new THREE.Geometry();
       lineGeometry.vertices.push(new THREE.Vector3(0,0,0));
@@ -469,7 +469,7 @@ class Arrow extends Component {
   }
 
   render() {
-    return(null);
+    return null;
   }
 }
 
