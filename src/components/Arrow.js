@@ -55,6 +55,9 @@ export default class Arrow extends Component {
     // }
 
     props.scene.add(this.arrow);
+
+    props.objects.push(this.arrow);
+
     // this.arrow.position.set(1,0,0);
     // this.arrow.applyMatrix(new THREE.Matrix4().makeTranslation(0, 0, 0));
 
