@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { DragControls } from "three/examples/jsm/controls/DragControls";
+import { DragControls } from "./controls/DragControls";
 import Arrow from "./components/Arrow";
 
 const style = {
@@ -56,8 +56,9 @@ class App extends Component {
     // this.camera.position.x = 10; // is used here to set some distance from a cube that is located at z = 0
     // OrbitControls allow a camera to orbit around the object
     // https://threejs.org/docs/#examples/controls/OrbitControls
-    // this.controls = new OrbitControls(this.camera, this.el);
-    this.dragContols = new DragControls( this.objects, this.camera, this.el );
+    this.controls = new OrbitControls(this.camera, this.el);
+    this.dragContols = new DragControls( this.objects, this.camera, this.el, this.controls );
+    // this.dragContols.set()
 
     this.renderer = new THREE.WebGLRenderer({antialias:true});
     // this.renderer = new THREE.WebGLRenderer({});
