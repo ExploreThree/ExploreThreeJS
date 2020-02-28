@@ -46,13 +46,22 @@ class App extends Component {
 
     const width = this.el.clientWidth;
     const height = this.el.clientHeight;
-    this.camera = new THREE.PerspectiveCamera(
-      75, // fov = field of view
-      width / height, // aspect ratio
-      0.1, // near plane
-      1000 // far plane
+    //   this.camera = new THREE.PerspectiveCamera(
+    //   75, // fov = field of view
+    //   width / height, // aspect ratio
+    //   0.1, // near plane
+    //   1000 // far plane
+    // );
+    this.camera = new THREE.OrthographicCamera(
+      width / - 2, //left
+      width / 2, //right
+      height / 2, //top
+      height / - 2, //bottom
+      1, //near
+      1000 //far
     );
-    this.camera.position.z = 10; // is used here to set some distance from a cube that is located at z = 0
+    this.camera.zoom = 200;
+    this.camera.position.z = 500; // is used here to set some distance from a cube that is located at z = 0
     // this.camera.position.x = 10; // is used here to set some distance from a cube that is located at z = 0
     // OrbitControls allow a camera to orbit around the object
     // https://threejs.org/docs/#examples/controls/OrbitControls
