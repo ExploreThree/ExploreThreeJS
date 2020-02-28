@@ -13,7 +13,7 @@ import {
 	Vector3
 } from "three/build/three.module.js";
 
-var DragControls = function ( _objects, _camera, _domElement, _orbitControls ) {
+var DragControls = function ( _objects, _camera, _domElement ) {
 
 	var _plane = new Plane();
 	var _raycaster = new Raycaster();
