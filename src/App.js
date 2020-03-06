@@ -5,9 +5,6 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { DragControls } from "./controls/DragControls";
 import Arrow from "./components/Arrow";
 
-const style = {
-  height: 600 // we can control scene size by setting container dimensions
-};
 
 class App extends Component {
   constructor(props){
@@ -44,24 +41,28 @@ class App extends Component {
 
     controlAndRenderSetup = () => {
 
-    const width = this.el.clientWidth;
-    const height = this.el.clientHeight;
+    this.width = this.el.clientWidth;
+    this.height = this.el.clientHeight;
     //   this.camera = new THREE.PerspectiveCamera(
     //   75, // fov = field of view
     //   width / height, // aspect ratio
     //   0.1, // near plane
     //   1000 // far plane
     // );
+    this.aspectRatio = this.width/this.height;
+    this.viewSize = 20;
     this.camera = new THREE.OrthographicCamera(
-      width / - 2, //left
-      width / 2, //right
-      height / 2, //top
-      height / - 2, //bottom
-      1, //near
+      // -this.aspectRatio*this.viewSize / 2, //left
+      // this.aspectRatio*this.viewSize / 2, //right
+      -this.aspectRatio*this.viewSize / 2, //left
+      this.aspectRatio*this.viewSize / 2, //right
+      this.viewSize / 2, //top
+      -this.viewSize / 2, //bottom
+      -1000, //near
       1000 //far
     );
-    this.camera.zoom = 200;
-    this.camera.position.z = 500; // is used here to set some distance from a cube that is located at z = 0
+    this.camera.zoom = 1;
+    this.camera.position.z = 10; // is used here to set some distance from a cube that is located at z = 0
     // this.camera.position.x = 10; // is used here to set some distance from a cube that is located at z = 0
     // OrbitControls allow a camera to orbit around the object
     // https://threejs.org/docs/#examples/controls/OrbitControls
@@ -72,7 +73,7 @@ class App extends Component {
     this.renderer = new THREE.WebGLRenderer({antialias:true});
     // this.renderer = new THREE.WebGLRenderer({});
     this.renderer.setClearColor("#FFFFFF");
-    this.renderer.setSize(width, height);
+    this.renderer.setSize(this.width, this.height);
     this.el.appendChild(this.renderer.domElement); // mount using React ref
   };
 
@@ -108,19 +109,43 @@ class App extends Component {
   };
 
   handleWindowResize = () => {
-    const width = this.el.clientWidth;
-    const height = this.el.clientHeight;
+    
+    let priorArea = this.width * this.height;
+    this.width = this.el.clientWidth;
+    this.height = this.el.clientHeight;
+    this.viewSize = this.viewSize * priorArea / (this.width * this.height);
+    this.aspectRatio = this.width/this.height;
 
-    this.renderer.setSize(width, height);
-    this.camera.aspect = width / height;
+    this.camera.left = -this.aspectRatio*this.viewSize / 2;
+    this.camera.right = this.aspectRatio*this.viewSize / 2;
+    this.camera.top = this.viewSize / 2;
+    this.camera.bottom = this.viewSize / -2;
+    
+    this.renderer.setSize(this.width, this.height);
+    // this.camera.aspect = width / height;
+    
 
     // Note that after making changes to most of camera properties you have to call
     // .updateProjectionMatrix for the changes to take effect.
     this.camera.updateProjectionMatrix();
+    this.forceUpdate();
   };
 
   render() {
 
+    var w = window.innerWidth
+|| document.documentElement.clientWidth
+|| document.body.clientWidth;
+
+var h = window.innerHeight
+|| document.documentElement.clientHeight
+|| document.body.clientHeight;
+    console.log(`${w} x ${h}` );
+    
+
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    let style = {width:width,height: height,borderStyle:"solid",borderColor:"red"}
 
     return <div style={style} ref={ref => (this.el = ref)} >
       <Arrow scene={this.scene} objects={this.objects} />
