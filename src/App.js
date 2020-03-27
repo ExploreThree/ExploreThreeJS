@@ -7,25 +7,37 @@ import Arrow from "./components/Arrow";
 
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
+
+    this.handleWindowResize = this.handleWindowResize.bind(this);
 
     this.sceneSetup = this.sceneSetup.bind(this);
 
     this.sceneSetup();
 
     this.objects = [];
-    
+
+    //Switches the camera type
+    // this.cameraType = "orthographic";
+    this.cameraType = "perspective";
+
   }
   componentDidMount() {
     this.controlAndRenderSetup();
     this.addCustomSceneObjects();
     this.startAnimationLoop();
     window.addEventListener("resize", this.handleWindowResize);
+    // document.addEventListener("mousemove",(e)=>{
+    //   console.log(e);
+
+    // })
   }
 
   componentWillUnmount() {
+
     window.removeEventListener("resize", this.handleWindowResize);
+    // document.removeEventListener("mousemove",()=>{})
     window.cancelAnimationFrame(this.requestID);
     // this.controls.dispose();
     this.dragContols.dispose();
@@ -38,31 +50,43 @@ class App extends Component {
     // get container dimensions and use them for scene sizing
 
     this.scene = new THREE.Scene();
-    
+
   }
 
-    controlAndRenderSetup = () => {
+  controlAndRenderSetup = () => {
 
     this.width = this.el.clientWidth;
     this.height = this.el.clientHeight;
-    //   this.camera = new THREE.PerspectiveCamera(
-    //   75, // fov = field of view
-    //   width / height, // aspect ratio
-    //   0.1, // near plane
-    //   1000 // far plane
-    // );
-    this.aspectRatio = this.width/this.height;
+    this.aspectRatio = this.width / this.height;
     this.viewSize = .05;
-    this.camera = new THREE.OrthographicCamera(
-      -this.width*this.viewSize / 2, //left
-      this.width*this.viewSize / 2, //right
-      // -this.aspectRatio*this.viewSize / 2, //left
-      // this.aspectRatio*this.viewSize / 2, //right
-      this.height*this.viewSize / 2, //top
-      -this.height*this.viewSize / 2, //bottom
-      -1000, //near
-      1000 //far
-    );
+
+    if (this.cameraType === "perspective") {
+      this.camera = new THREE.PerspectiveCamera(
+        75, // fov = field of view
+        this.width / this.height, // aspect ratio
+        0.1, // near plane
+        1000 // far plane
+      );
+    } else if (this.cameraType === "orthographic") {
+      this.camera = new THREE.OrthographicCamera(
+        -this.width * this.viewSize / 2, //left
+        this.width * this.viewSize / 2, //right
+        // -this.aspectRatio*this.viewSize / 2, //left
+        // this.aspectRatio*this.viewSize / 2, //right
+        this.height * this.viewSize / 2, //top
+        -this.height * this.viewSize / 2, //bottom
+        -1000, //near
+        1000 //far
+      );
+    } else {
+      console.log('Camera type not supported');
+
+    }
+
+
+
+
+
     this.camera.zoom = 1;
     this.camera.position.z = 10; // is used here to set some distance from a cube that is located at z = 0
     // this.camera.aspect = this.width / this.height;
@@ -71,10 +95,10 @@ class App extends Component {
     // OrbitControls allow a camera to orbit around the object
     // https://threejs.org/docs/#examples/controls/OrbitControls
     // this.controls = new OrbitControls(this.camera, this.el);
-    this.dragContols = new DragControls( this.objects, this.camera, this.el );
+    this.dragContols = new DragControls(this.objects, this.camera, this.el);
     // this.dragContols.set()
 
-    this.renderer = new THREE.WebGLRenderer({antialias:true});
+    this.renderer = new THREE.WebGLRenderer({ antialias: true });
     // this.renderer = new THREE.WebGLRenderer({});
     this.renderer.setClearColor("#FFFFFF");
     this.renderer.setSize(this.width, this.height);
@@ -113,18 +137,20 @@ class App extends Component {
   };
 
   handleWindowResize = () => {
-    
+
 
     this.width = this.el.clientWidth;
     this.height = this.el.clientHeight;
-    
-    this.camera.left = -this.width*this.viewSize / 2; 
-    this.camera.right = this.width*this.viewSize / 2; 
-    this.camera.top = this.height*this.viewSize / 2;
-    this.camera.bottom = -this.height*this.viewSize / 2;
-    
-    // this.camera.aspect = this.width / this.height;
-    
+    let aspect = this.width / this.height;
+    if (this.cameraType === "perspective") {
+      this.camera.aspect = aspect;
+    } else if (this.cameraType === "orthographic") {
+      this.camera.left = -this.width * this.viewSize / 2;
+      this.camera.right = this.width * this.viewSize / 2;
+      this.camera.top = this.height * this.viewSize / 2;
+      this.camera.bottom = -this.height * this.viewSize / 2;
+    }
+
 
     // Note that after making changes to most of camera properties you have to call
     // .updateProjectionMatrix for the changes to take effect.
@@ -136,23 +162,23 @@ class App extends Component {
 
   render() {
 
-//     var w = window.innerWidth
-// || document.documentElement.clientWidth
-// || document.body.clientWidth;
+    //     var w = window.innerWidth
+    // || document.documentElement.clientWidth
+    // || document.body.clientWidth;
 
-// var h = window.innerHeight
-// || document.documentElement.clientHeight
-// || document.body.clientHeight;
+    // var h = window.innerHeight
+    // || document.documentElement.clientHeight
+    // || document.body.clientHeight;
     // console.log(`${w} x ${h}` );
-    
+
 
     let width = window.innerWidth;
     let height = window.innerHeight;
-    let style = {width:width,height: height,borderStyle:"solid",borderColor:"red"}
+    let style = { width: width, height: height, borderStyle: "solid", borderColor: "red" }
 
     return <div style={style} ref={ref => (this.el = ref)} >
       <Arrow scene={this.scene} objects={this.objects} />
-      </div>;
+    </div>;
   }
 }
 
